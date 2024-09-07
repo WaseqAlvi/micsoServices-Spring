@@ -1,5 +1,8 @@
 package com.job.job.MicroService.Job;
 
+import com.job.job.MicroService.AppConfig;
+import com.job.job.MicroService.DTO.JobWithCompanyDTO;
+import com.job.job.MicroService.External.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -7,21 +10,37 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 
 public class JobServiceImplement implements JobService {
 
     public ArrayList<Job> lists = new ArrayList<>();
+
+
     @Autowired
     JobRepository jobRepository;
 
+    @Autowired
+    RestTemplate restTemplate;
 
     @Override
-    public List<Job> findAll() {
-        RestTemplate restTemplate=new RestTemplate();
-        restTemplate.getForObject()
-        return jobRepository.findAll();
+    public List<JobWithCompanyDTO> findAll() {
+        List<Job> allJobs=jobRepository.findAll();
+        List<JobWithCompanyDTO> jobWithCompanyDTOList=new ArrayList<>();
+        return allJobs.stream().map(this::jobWithCompanyDTOConverter).collect(Collectors.toList());
+    }
+
+    private JobWithCompanyDTO jobWithCompanyDTOConverter(Job job){
+
+        JobWithCompanyDTO jobWithCompanyDTO=new JobWithCompanyDTO();
+        Company company=restTemplate.getForObject("http://COMPANY-MICROSERVICE:8082/company/"+job.getCompanyId(), Company.class);
+        jobWithCompanyDTO.setCompany(company);
+        jobWithCompanyDTO.setSalary(job.getSalary());
+        jobWithCompanyDTO.setTitle(job.getTitle());
+        jobWithCompanyDTO.setId(job.getId());
+        return jobWithCompanyDTO;
     }
 
     @Override
@@ -44,9 +63,13 @@ public class JobServiceImplement implements JobService {
     }
 
     @Override
-    public Job getJobById(long id) {
+    public JobWithCompanyDTO getJobById(long id) {
 
-        return jobRepository.findById(id).orElse(null);
+
+        Job job=jobRepository.findById(id).orElse(null);
+        if(job==null)
+            return null;
+        return jobWithCompanyDTOConverter(job);
     }
 
 

@@ -1,5 +1,6 @@
 package com.job.job.MicroService.Job;
 
+import com.job.job.MicroService.DTO.JobWithCompanyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ public class JobController {
     JobService jobService;
 
     @GetMapping
-    public ResponseEntity<List<Job>>  findAll(){
+    public ResponseEntity<List<JobWithCompanyDTO>>  findAll(){
 
         return  ResponseEntity.ok(jobService.findAll());
     }
@@ -22,12 +23,12 @@ public class JobController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getJobById(@PathVariable long id){
 
-        Job job=jobService.getJobById(id);
+        JobWithCompanyDTO jobWithCompanyDTO=jobService.getJobById(id);
 
-        if (job==null){
+        if (jobWithCompanyDTO==null){
             return new ResponseEntity<>("Job Not Found",HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(job);
+        return ResponseEntity.ok(jobWithCompanyDTO);
 
     }
     @PostMapping
