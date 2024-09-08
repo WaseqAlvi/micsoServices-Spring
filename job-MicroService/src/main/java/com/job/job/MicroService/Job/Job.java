@@ -16,8 +16,6 @@ public class Job {
     private long id;
     private String title;
     private int salary;
-
-
     private long companyId;
 
 

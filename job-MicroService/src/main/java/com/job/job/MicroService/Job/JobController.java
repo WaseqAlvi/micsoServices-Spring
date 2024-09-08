@@ -31,7 +31,7 @@ public class JobController {
         return ResponseEntity.ok(jobWithCompanyDTO);
 
     }
-    @PostMapping
+    @PostMapping("/createJob")
     public ResponseEntity<String> createJob(@RequestBody Job job){
         jobService.createJob(job);
         return new ResponseEntity<>("Job created", HttpStatus.CREATED);

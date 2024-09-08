@@ -1,5 +1,6 @@
 package com.company.Company.MicroService.Company;
 
+import com.company.Company.MicroService.DTO.CompanyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +28,12 @@ public class CompanyController {
     public ResponseEntity<?> getCompanyById(@PathVariable long id){
 
 
-        Company company=companyService.getCompanyById(id);
+        CompanyDTO companyDTO=companyService.getCompanyById(id);
 
 
-        if (company==null)
+        if (companyDTO==null)
             return new ResponseEntity<>("Company not found brother",HttpStatus.NOT_FOUND);
-        return ResponseEntity.ok(company);
+        return ResponseEntity.ok(companyDTO);
     }
 
     @PostMapping
