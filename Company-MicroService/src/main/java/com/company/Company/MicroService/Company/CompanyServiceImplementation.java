@@ -41,7 +41,6 @@ public class CompanyServiceImplementation implements CompanyService {
     }
 
     private CompanyDTO convertCompanyDTO(Company company){
-
           ResponseEntity<List<Review>> ReviewListResponseEntity= restTemplate.exchange(
                 "http://REVIEW-MICROSERVICE:8083/reviews?companyId=" + company.getId(),
                 HttpMethod.GET,
@@ -50,25 +49,15 @@ public class CompanyServiceImplementation implements CompanyService {
         );
         List<Review> reviewList = ReviewListResponseEntity.getBody();
 
-
         ResponseEntity<List<Job>> jobListResponseEntity= restTemplate.exchange(
-                "http://JOB-MICROSERVICE:8085/jobs",
+                "http://JOB-MICROSERVICE:8085/jobs/b?companyId="+company.getId(),
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Job>>() {}
         );
-
         List<Job> jobList = jobListResponseEntity.getBody();
-
-//if(jobList!=null) {
-//    for (Job job : jobList) {
-//        System.out.println(job.getTitle());
-//    }
-//}
-
         CompanyDTO companyDTO=new CompanyDTO();
-
-       //companyDTO.setJobList(jobList);
+       companyDTO.setJobList(jobList);
         companyDTO.setReviewList(reviewList);
         companyDTO.setCompanyName(company.getCompanyName());
         companyDTO.setLocation(company.getLocation());

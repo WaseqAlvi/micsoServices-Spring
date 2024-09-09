@@ -32,6 +32,12 @@ public class JobServiceImplement implements JobService {
         return allJobs.stream().map(this::jobWithCompanyDTOConverter).collect(Collectors.toList());
     }
 
+    @Override
+    public List<Job> findJobByCompanyId(long companyID) {
+
+        return jobRepository.findByCompanyId(companyID);
+    }
+
     private JobWithCompanyDTO jobWithCompanyDTOConverter(Job job){
 
         JobWithCompanyDTO jobWithCompanyDTO=new JobWithCompanyDTO();
