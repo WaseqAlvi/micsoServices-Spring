@@ -18,7 +18,7 @@ public class CompanyController {
 
     CompanyRepository companyRepository;
     @GetMapping
-    public ResponseEntity<List<Company>> allCompany(){
+    public ResponseEntity<List<CompanyDTO>> allCompany(){
 
 
         return ResponseEntity.ok(companyService.allCompany());

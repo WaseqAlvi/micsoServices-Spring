@@ -24,8 +24,15 @@ public class CompanyServiceImplementation implements CompanyService {
 
 
     @Override
-    public List<Company> allCompany() {
-        return companyRepository.findAll();
+    public List<CompanyDTO> allCompany() {
+        List<CompanyDTO> companyList=new ArrayList<>();
+
+        for(Company company:companyRepository.findAll()){
+
+            companyList.add(convertCompanyDTO(company));
+        }
+
+        return companyList;
     }
 
     @Override
